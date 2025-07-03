@@ -1,38 +1,45 @@
-# Predictive Model for ENT Surgery Adjustment
+# Confidence-Based Prediction Optimization 
 
-This repository contains a Jupyter notebook implementing a **customized machine learning model** designed to predict surgical triage in an ENT (Ear, Nose, and Throat) clinical setting.
+This repository provides a Jupyter notebook demonstrating a **general method for optimizing machine learning models to make confident predictions**. The approach is designed to be adaptable across domains where it is important to distinguish between high-confidence and uncertain predictions, supporting robust and trustworthy decision-making.
 
-## Project Overview
+## Method Overview
 
-The goal is to build a predictive model that supports clinical decision-making by identifying patients who may require surgical intervention, leveraging a tailored loss function and scoring metric to prioritize confident predictions.
+The goal is to train models that not only maximize accuracy, but also **prioritize confident predictions**—clearly identifying cases where the model is highly certain, and flagging uncertain cases for further review. This is achieved through:
 
-The model uses a custom **shifted quadratic loss function** integrated into an XGBoost classifier wrapped for compatibility with scikit-learn tools. The workflow includes:
+- A custom **shifted quadratic loss function** that encourages the model to make more confident predictions.
+- A custom scoring metric that rewards correct, high-confidence outputs.
+- A two-threshold strategy to separate confident positive, confident negative, and uncertain predictions.
+
+The workflow includes:
 
 - Data preprocessing and splitting into train, validation, and test sets.
 - Hyperparameter tuning using grid search with a custom scoring function.
 - Model evaluation on an independent test set with metrics such as accuracy, AUROC, AUPRC, and precision-recall analyses.
-- Threshold analysis to optimize positive and negative predictive values (PPV and NPV).
+- Threshold analysis to optimize positive and negative predictive values (PPV and NPV), and to quantify the proportion of high-confidence predictions.
 
 ## Two-Threshold Approach and Handling Uncertainty
 
-This model applies a **two-threshold decision strategy** to improve clinical utility and safety:
+This model applies a **two-threshold decision strategy** to enhance reliability and safety in automated predictions:
 
-- Patients with **less than 5% predicted probability** (confidence of at least 95%) are classified as **confidently not needing surgery**.
-- Patients with **greater than or equal to 80% predicted probability** are classified as **confidently needing surgery**.
+- **Confident Negative:** Predictions with probability below 5% (confidence ≥ 95%) are classified as confidently negative.
+- **Confident Positive:** Predictions with probability at or above 80% are classified as confidently positive.
+- **Uncertain Zone:** Predictions between these thresholds are considered uncertain and are flagged for human or expert review.
 
-Patients with predicted probabilities **between these two thresholds represent uncertain cases** where the model’s confidence is insufficient for a definitive decision. These cases are flagged for **review by human clinical experts**, ensuring that uncertain predictions receive careful consideration and additional clinical judgment.
+This approach allows the model to abstain from making a decision when confidence is low, ensuring that only high-certainty predictions are automated, while ambiguous cases are reviewed by human experts. This is especially valuable in high-stakes applications such as healthcare, finance, or safety-critical systems.
 
-This approach aligns with best practices in medical machine learning, where **quantifying and communicating uncertainty is critical** for safe and trustworthy clinical decision-making. By allowing the model to abstain on uncertain cases, clinicians can focus on high-confidence predictions while carefully evaluating ambiguous cases, improving overall patient safety and care quality.
+## General Application
 
-## Application to ENT Case
+The approach is **domain-agnostic** and can be applied to any binary classification problem where confident decision-making is essential.
 
-The model is applied to an ENT dataset to predict the need for surgical adjustments, aiming to improve patient outcomes by identifying confident true positives and true negatives. This approach helps clinicians prioritize cases and optimize treatment plans.
+## How to Use
 
-## Usage
-
-- Replace the placeholder dataset with your own data.
+- Replace the placeholder dataset with your own data and specify the appropriate target variable.
 - Run the notebook to preprocess data, train the model, tune hyperparameters, and evaluate performance.
 - Use the threshold analysis plots to select decision thresholds aligned with your priorities.
+
+## Example: Application to ENT Surgery Triage
+
+As an example, this method was applied to predict surgical triage in an ENT (Ear, Nose, and Throat) clinical setting. The model was trained to identify patients who are highly likely or unlikely to need surgery, while referring uncertain cases for further clinical review. This improved both the efficiency and safety of patient selection.
 
 ## Acknowledgements
 
