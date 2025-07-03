@@ -43,4 +43,4 @@ As an example, this method was applied to predict surgical triage in an ENT (Ear
 
 ## Acknowledgements
 
-This work is a collaboration between Alexandra-Catalina Negoita, Prof. Santiago Romero-Brufau, Valentina Caducei, and Doug Snyder.
+This work is a collaboration between Alexandra-Catalina Negoita, Prof. Santiago Romero-Brufau, Valentina Carducci, and Doug Snyder.
